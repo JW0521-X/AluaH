@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alua Kernel - Development Stage</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-dark.min.css">
+    <style>
+        body {
+            box-sizing: border-box;
+            min-width: 200px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 45px;
+            background-color: #0d1117;
+        }
+        .markdown-body {
+            background-color: transparent !important;
+        }
+        .dev-badge {
+            background-color: #6e40c9;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .info-box {
+            border: 1px solid #388bfd;
+            background-color: rgba(56, 139, 253, 0.1);
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        .progress-bar {
+            background: #30363d;
+            height: 8px;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: #a371f7;
+            height: 100%;
+            width: 15%; /* 模擬初期開發進度 */
+        }
+    </style>
+</head>
+<body class="markdown-body">
+
+    <div class="dev-badge">開發階段：早期架構預覽</div>
+    
+    <h1>Alua Kernel</h1>
+    
+    <blockquote>
+        <strong>A Pure, Independent OS Kernel Environment.</strong>
+    </blockquote>
+
+    <div class="info-box">
+        <strong>核心定義：</strong><br>
+        Alua Kernel 是完全脫離 EFI 依賴（除引導程序 Bootloader 之外）的獨立內核。它旨在提供一個更純粹的執行環境，不直接調用韌體運行時服務。
+    </div>
+
+    <h2>目前開發進度</h2>
+    <p>核心狀態：<strong>引導程序已成形 (Bootloader Ready)</strong></p>
+    <div class="progress-bar">
+        <div class="progress-fill"></div>
+    </div>
+    <small style="color: #8b949e;">整體開發進度：15%</small>
+
+    <hr>
+
+    <h2>設計目標</h2>
+    <ul>
+        <li><strong>硬體抽象化</strong>：不再依賴 UEFI Runtime Services，改為直接控制硬體中斷與內存分頁。</li>
+        <li><strong>高性能調度</strong>：針對 Alua 腳本引擎優化的內核級任務調度。</li>
+        <li><strong>模組化驅動</strong>：支持動態加載內核模組 (KM)。</li>
+    </ul>
+
+    <h2>技術說明</h2>
+    <p>與 EFI 版本不同，Alua Kernel 在接管 CPU 控制權後會切換至保護模式或長模式，並重新構建中斷描述表 (IDT) 與全局描述表 (GDT)。</p>
+
+    <section id="faq" style="margin-top: 50px;">
+        <h3>與 EFI 版的差異？</h3>
+        <p>EFI 版是運行在韌體環境下的 App，而 Kernel 版則是試圖成為「環境本身」。如果您需要開發底層驅動或作業系統組件，Kernel 版將是未來的首選。</p>
+    </section>
+
+    <hr>
+
+    <footer style="text-align: center; padding: 20px;">
+        <p><a href="index.html" style="color: #58a6ff; text-decoration: none;">← 返回入口頁面</a></p>
+        <p style="font-size: 0.8em; color: #8b949e;">Alua Kernel Project (Ver 5.x Series Preview)</p>
+    </footer>
+
+</body>
+</html>
