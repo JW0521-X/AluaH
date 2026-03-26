@@ -3,146 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alua for EFI (EDK2) - Terminal Interface</title>
+    <title>Alua Engine - High-Performance Scripting for UEFI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-dark.min.css">
     <style>
-        :root {
-            --uefi-blue: #0000aa;
-            --uefi-grey: #aaaaaa;
-            --terminal-green: #00ff00;
-        }
         body {
             box-sizing: border-box;
             min-width: 200px;
-            max-width: 900px;
+            max-width: 980px;
             margin: 0 auto;
             padding: 45px;
-            background-color: #000000; /* 純正黑背景 */
-            font-family: 'Cascadia Code', 'Courier New', Courier, monospace;
+            background-color: #0d1117;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         }
-        .markdown-body {
-            background-color: transparent !important;
-            color: var(--uefi-grey) !important;
-        }
-        .markdown-body h1, .markdown-body h2 {
-            border-bottom: 1px solid #333;
-            color: #ffffff;
-        }
-        /* 模擬 UEFI 標題列 */
-        .efi-header {
-            background-color: var(--uefi-grey);
-            color: #000;
-            padding: 2px 10px;
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background-color: #238636;
+            color: white;
+            font-size: 0.9em;
             font-weight: bold;
             margin-bottom: 20px;
-            text-align: center;
         }
-        .status-tag {
-            color: var(--terminal-green);
-            border: 1px solid var(--terminal-green);
-            padding: 2px 8px;
-            font-size: 0.8em;
+        .warning-box {
+            background-color: #382324;
+            border: 1px solid #f85149;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
         }
-        .warning-text {
-            color: #ff5555;
-            font-weight: bold;
+        .experimental {
+            color: #d29922;
+            border-bottom: 1px dashed #d29922;
         }
-        pre {
-            background-color: #1e1e1e !important;
-            border: 1px solid #444 !important;
+        table { width: 100%; display: table !important; }
+        @media (max-width: 767px) {
+            body { padding: 15px; }
         }
-        table { border-collapse: collapse; width: 100%; }
-        th { background-color: #222; }
     </style>
 </head>
 <body class="markdown-body">
 
-    <div class="efi-header">
-        ALUA EFI LOADER INTERFACE - VERSION 0.4.5
-    </div>
-
-    <h1>Alua for EFI <span class="status-tag">EDK2-Native</span></h1>
-    <blockquote>
-        <strong>High-Performance, Register-based Scripting Engine optimized for UEFI MS ABI.</strong>
-    </blockquote>
-
-    <section id="firmware-core">
-        <h2>核心技術 (Firmware Core)</h2>
-        <ul>
-            <li><strong>MS ABI Support</strong>: 完全符合 UEFI 調用慣例，與 <code>edk2</code> 深度整合。</li>
-            <li><strong>LibC Integration</strong>: 已手動補足韌體環境下缺失的標準 C 庫支持。</li>
-            <li><strong>Register-based</strong>: 針對寄存器架構設計，非傳統棧式機，提升指令執行效率。</li>
-        </ul>
-        <p class="warning-text">> 提示：由於 RootFS 深度依賴 UEFI API (efiP)，此版本被列為核心基礎版，永不廢除。</p>
-    </section>
+    <header>
+        <h1>Alua (Alua Engine)</h1>
+        <div class="status-badge">目前版本：0.4.5</div>
+        <blockquote>
+            <strong>A High-Performance, Register-based Scripting Engine for UEFI Environments.</strong>
+        </blockquote>
+        <p>Alua 是一個專為 <strong>AOS (Alua Operating System)</strong> 啟動環境開發的腳本引擎。它保留了 Lua 簡潔的語法特性，但針對底層韌體環境進行了深度重構與優化。</p>
+    </header>
 
     <hr>
 
-    <section id="isa">
-        <h2>指令集架構 (ISA - EFI Optimization)</h2>
-        <p>32-bit 定長指令，確保在 Pre-Boot 內存受限環境下的解碼效率：</p>
+    <section id="core">
+        <h2>核心技術</h2>
+        <ul>
+            <li><strong>Firmware-Native ABI</strong>: 核心完全基於 <strong>UEFI MS ABI</strong> 構建，與 <code>edk2</code> 深度整合，已補足標準 C 庫 (LibC) 支持。</li>
+        </ul>
+        <p><em>註：開發進度極深，目前正在評估移植方案。</em></p>
+    </section>
+
+    <section id="roadmap" class="warning-box">
+        <h2 class="experimental">未來開發計劃 (草案)</h2>
+        <p>以下內容可能隨開發進度調整或廢除：</p>
+        
+        <h3>指令集架構 (ISA)</h3>
+        <p>Alua 採用 32-bit 定長指令格式，確保在內存受限環境下的解碼效率：</p>
         <table>
             <thead>
                 <tr>
                     <th>分類</th>
                     <th>指令 (OpCodes)</th>
-                    <th>EFI 運作說明</th>
+                    <th>說明</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td><strong>Data</strong></td>
-                    <td><code>LOADK</code>, <code>MOVE</code></td>
-                    <td>常量與寄存器操作</td>
+                    <td><code>LOADK</code>, <code>MOVE</code>, <code>GETGLOBAL</code></td>
+                    <td>常量加載、寄存器移動、全域變數獲取</td>
                 </tr>
                 <tr>
                     <td><strong>Math</strong></td>
                     <td><code>ADD</code>, <code>SUB</code>, <code>MUL</code>, <code>DIV</code></td>
-                    <td>純整數運算 (無浮點數依賴)</td>
+                    <td>純整數算術運算</td>
                 </tr>
                 <tr>
                     <td><strong>Flow</strong></td>
-                    <td><code>JMP</code>, <code>EQ</code>, <code>TEST</code></td>
-                    <td>條件跳轉與判斷</td>
+                    <td><code>JMP</code>, <code>EQ</code>, <code>LT</code>, <code>TEST</code></td>
+                    <td>跳轉與邏輯判斷 (支持 <code>if-else-fi</code>)</td>
                 </tr>
                 <tr>
                     <td><strong>System</strong></td>
                     <td><code>PRINT</code>, <code>CALL</code></td>
-                    <td>調用 UEFI ConsoleOut 或 Protocol</td>
+                    <td>系統輸出與函數調用</td>
                 </tr>
             </tbody>
         </table>
+        
+        <h3>其他提案</h3>
+        <ul>
+            <li>渲染系統移植方案 (驅動選定中)</li>
+            <li>Linux Kernel 移植實驗</li>
+        </ul>
     </section>
 
-    <section id="deployment">
-        <h2>部署方法 (EDK2 / QEMU)</h2>
-        <p>請將編譯後的 <code>BOOTX64.EFI</code> 放入 ESP 分區。建議測試環境：</p>
-        <pre><code># 1. 準備文件結構
-mkdir -p qemu_root/EFI/BOOT
-cp -r ./ROOTFS/* ./qemu_root/
-cp EFI/BOOT/BOOTX64.EFI ./qemu_root/EFI/BOOT/
+    <section id="usage">
+        <h2>使用方法</h2>
+        <p>建議使用 <strong>QEMU</strong> 測試，請務必等到 <strong>1.0.0 正式版</strong> 後再於實體機器進行測試。</p>
+        <pre><code>git clone https://github.com/JW0521-X/Alua.git
+cd Alua
+mkdir qemu_root
+cp -r ./ROOTFS/* ./qemu_root
+cp EFI/BOOT/BOOTX64.EFI ./qemu_root/EFI/BOOT
 
-# 2. 啟動 QEMU (需指定 OVMF)
-qemu-system-x86_64 -machine q35 -pflash /path/to/ovmf.fd \
-  -drive format=raw,file=fat:rw:qemu_root -m 256</code></pre>
-    </section>
-
-    <section id="faq">
-        <h2>EFI 常見問題</h2>
-        <h3>為什麼 EFI 版不會被廢除？</h3>
-        <p>因為 <strong>Alua EFI</strong> 作為 AOS 的第一階段引導核心，承載了大量與硬體直接對接的 API。若廢除此版，將導致整個 AOS 生態系無法在原生韌體上啟動。</p>
-
-        <h3>APP 相容性注意</h3>
-        <p>若 App 使用了 <code>efiP</code> (EFI Protocol) 專屬模塊，則無法在其他非 EFI 環境（如 Linux）運行。請開發者務必確認 API 調用範圍。</p>
+qemu-system-x86_64 -machine q35 -accel tcg -cpu max -pflash /path/to/ovmf.fd -drive format=raw,file=fat:rw:qemu_root -m 256</code></pre>
+        <h3>實驗程式</h3>
+        <p>你可以運行 stress 測試內核崩潰（程式碼整理中）。</p>
     </section>
 
     <hr>
 
+    <section id="lifecycle">
+        <h2>版本生命週期</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>版本(基於)</th>
+                    <th>開始</th>
+                    <th>預停 (Deprecation)</th>
+                    <th>停止 (EOL)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>EFI</td>
+                    <td>0.0.1</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                </tr>
+                <tr>
+                    <td>alua kernel</td>
+                    <td>5.0.0</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                </tr>
+                <tr>
+                    <td>kernel for linux</td>
+                    <td>Z.0.1</td>
+                    <td>Z.5.0</td>
+                    <td>Z.6</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Linux Kernel 版特殊時程</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>版本</th>
+                    <th>開始時間</th>
+                    <th>停止時間</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Z.0.1</td>
+                    <td>2027/02/01</td>
+                    <td>2027/10/01</td>
+                </tr>
+                <tr>
+                    <td>Z.1.X</td>
+                    <td>2027/11/10</td>
+                    <td>2028/03/01</td>
+                </tr>
+                <tr>
+                    <td>Z.2.X</td>
+                    <td>2028/06/01</td>
+                    <td>2028/12/10</td>
+                </tr>
+            </tbody>
+        </table>
+        <p><em>註：版本 Z.6.0 可能於 2035 年結束。</em></p>
+    </section>
+
+    <hr>
+
+    <section id="faq">
+        <h2>常見問題 (FAQ)</h2>
+        <h3>EFI 版為什麼不會被廢除？</h3>
+        <p>因為 rootfs 深度依賴 UEFI 提供的 API，大幅修改將導致系統結構崩潰。</p>
+
+        <h3>各版本 App 互不相容嗎？</h3>
+        <p>取決於開發者是否提供跨平台 API (km/so/efiP)。若僅提供特定模塊（如 <code>powermanager</code>），則其他環境將無法啟動。</p>
+        <p><strong>注意：</strong>請勿嘗試自行編寫 App API，除非你完全理解其運作機制。</p>
+
+        <h3>舊版本會被刪除嗎？</h3>
+        <p>不會。所有版本均會保留供測試與研究，但 EOL 版本不保證運行穩定。</p>
+    </section>
+
     <footer>
-        <p style="font-size: 0.85em; text-align: center;">
-            Base Architecture: EFI (edk2) | Current Status: Stable Development<br>
-            Last Build: 2026/03/22 更新
-        </p>
+        <hr>
+        <p style="text-align: center; color: #8b949e;">最後更新時間：2026/03/26</p>
     </footer>
 
 </body>
