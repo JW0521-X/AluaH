@@ -3,208 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alua Engine - High-Performance Scripting for UEFI</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-dark.min.css">
+    <title>Alua Engine - Select Your Environment</title>
     <style>
+        :root {
+            --bg-color: #0d1117;
+            --efi-blue: #0078d4;
+            --kernel-purple: #8a2be2;
+            --text-main: #e6edf3;
+            --text-dim: #8b949e;
+        }
+
         body {
-            box-sizing: border-box;
-            min-width: 200px;
-            max-width: 980px;
-            margin: 0 auto;
-            padding: 45px;
-            background-color: #0d1117;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
         }
-        .status-badge {
+
+        .background-glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, #161b22 0%, #0d1117 100%);
+            z-index: -1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #ffffff, #8b949e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+        }
+
+        .container {
+            display: flex;
+            gap: 30px;
+            width: 90%;
+            max-width: 1000px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            flex: 1;
+            min-width: 300px;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: #8b949e;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* EFI 版樣式 */
+        .card.efi:hover {
+            box-shadow: 0 0 20px rgba(0, 120, 212, 0.3);
+            border-color: var(--efi-blue);
+        }
+
+        /* Kernel 版樣式 */
+        .card.kernel:hover {
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+            border-color: var(--kernel-purple);
+        }
+
+        .card h2 {
+            font-size: 1.8rem;
+            margin-top: 0;
+        }
+
+        .card p {
+            color: var(--text-dim);
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .btn {
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            background-color: #238636;
-            color: white;
-            font-size: 0.9em;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        .warning-box {
-            background-color: #382324;
-            border: 1px solid #f85149;
-            padding: 15px;
+            padding: 12px 24px;
             border-radius: 6px;
-            margin: 20px 0;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: background 0.2s;
         }
-        .experimental {
-            color: #d29922;
-            border-bottom: 1px dashed #d29922;
+
+        .efi .btn { background-color: var(--efi-blue); color: white; }
+        .kernel .btn { background-color: var(--kernel-purple); color: white; }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: #30363d;
+            margin-bottom: 15px;
+            display: inline-block;
         }
-        table { width: 100%; display: table !important; }
-        @media (max-width: 767px) {
-            body { padding: 15px; }
+
+        footer {
+            margin-top: 60px;
+            color: #484f58;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            header h1 { font-size: 2rem; }
         }
     </style>
 </head>
-<body class="markdown-body">
+<body>
+
+    <div class="background-glow"></div>
 
     <header>
-        <h1>Alua (Alua Engine)</h1>
-        <div class="status-badge">目前版本：0.4.5</div>
-        <blockquote>
-            <strong>A High-Performance, Register-based Scripting Engine for UEFI Environments.</strong>
-        </blockquote>
-        <p>Alua 是一個專為 <strong>AOS (Alua Operating System)</strong> 啟動環境開發的腳本引擎。它保留了 Lua 簡潔的語法特性，但針對底層韌體環境進行了深度重構與優化。</p>
+        <h1>ALUA ENGINE</h1>
+        <p>請選擇您的運行環境架構</p>
     </header>
 
-    <hr>
-
-    <section id="core">
-        <h2>核心技術</h2>
-        <ul>
-            <li><strong>Firmware-Native ABI</strong>: 核心完全基於 <strong>UEFI MS ABI</strong> 構建，與 <code>edk2</code> 深度整合，已補足標準 C 庫 (LibC) 支持。</li>
-        </ul>
-        <p><em>註：開發進度極深，目前正在評估移植方案。</em></p>
-    </section>
-
-    <section id="roadmap" class="warning-box">
-        <h2 class="experimental">未來開發計劃 (草案)</h2>
-        <p>以下內容可能隨開發進度調整或廢除：</p>
+    <main class="container">
         
-        <h3>指令集架構 (ISA)</h3>
-        <p>Alua 採用 32-bit 定長指令格式，確保在內存受限環境下的解碼效率：</p>
-        <table>
-            <thead>
-                <tr>
-                    <th>分類</th>
-                    <th>指令 (OpCodes)</th>
-                    <th>說明</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Data</strong></td>
-                    <td><code>LOADK</code>, <code>MOVE</code>, <code>GETGLOBAL</code></td>
-                    <td>常量加載、寄存器移動、全域變數獲取</td>
-                </tr>
-                <tr>
-                    <td><strong>Math</strong></td>
-                    <td><code>ADD</code>, <code>SUB</code>, <code>MUL</code>, <code>DIV</code></td>
-                    <td>純整數算術運算</td>
-                </tr>
-                <tr>
-                    <td><strong>Flow</strong></td>
-                    <td><code>JMP</code>, <code>EQ</code>, <code>LT</code>, <code>TEST</code></td>
-                    <td>跳轉與邏輯判斷 (支持 <code>if-else-fi</code>)</td>
-                </tr>
-                <tr>
-                    <td><strong>System</strong></td>
-                    <td><code>PRINT</code>, <code>CALL</code></td>
-                    <td>系統輸出與函數調用</td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <h3>其他提案</h3>
-        <ul>
-            <li>渲染系統移植方案 (驅動選定中)</li>
-            <li>Linux Kernel 移植實驗</li>
-        </ul>
-    </section>
+        <a href="Alua-EFI_edk2-ver.html" class="card efi">
+            <div>
+                <span class="tag">Firmware Layer</span>
+                <h2>Alua for EFI</h2>
+                <p>基於 EDK2 開發，直接運行於 UEFI 環境。</p>
+            </div>
+            <div class="btn">進入說明頁面</div>
+        </a>
 
-    <section id="usage">
-        <h2>使用方法</h2>
-        <p>建議使用 <strong>QEMU</strong> 測試，請務必等到 <strong>1.0.0 正式版</strong> 後再於實體機器進行測試。</p>
-        <pre><code>git clone https://github.com/JW0521-X/Alua.git
-cd Alua
-mkdir qemu_root
-cp -r ./ROOTFS/* ./qemu_root
-cp EFI/BOOT/BOOTX64.EFI ./qemu_root/EFI/BOOT
+        <a href="AluaKernel-ver.html" class="card kernel">
+            <div>
+                <span class="tag">OS Layer</span>
+                <h2>Alua Kernel</h2>
+                <p>Alua OS 核心版本。提供更完整的系統調用、多工處理支援及進階記憶體管理架構。</p>
+            </div>
+            <div class="btn">進入說明頁面</div>
+        </a>
 
-qemu-system-x86_64 -machine q35 -accel tcg -cpu max -pflash /path/to/ovmf.fd -drive format=raw,file=fat:rw:qemu_root -m 256</code></pre>
-        <h3>實驗程式</h3>
-        <p>你可以運行 stress 測試內核崩潰（程式碼整理中）。</p>
-    </section>
-
-    <hr>
-
-    <section id="lifecycle">
-        <h2>版本生命週期</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>版本(基於)</th>
-                    <th>開始</th>
-                    <th>預停 (Deprecation)</th>
-                    <th>停止 (EOL)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>EFI</td>
-                    <td>0.0.1</td>
-                    <td>N/A</td>
-                    <td>N/A</td>
-                </tr>
-                <tr>
-                    <td>alua kernel</td>
-                    <td>5.0.0</td>
-                    <td>N/A</td>
-                    <td>N/A</td>
-                </tr>
-                <tr>
-                    <td>kernel for linux</td>
-                    <td>Z.0.1</td>
-                    <td>Z.5.0</td>
-                    <td>Z.6</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h3>Linux Kernel 版特殊時程</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>版本</th>
-                    <th>開始時間</th>
-                    <th>停止時間</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Z.0.1</td>
-                    <td>2027/02/01</td>
-                    <td>2027/10/01</td>
-                </tr>
-                <tr>
-                    <td>Z.1.X</td>
-                    <td>2027/11/10</td>
-                    <td>2028/03/01</td>
-                </tr>
-                <tr>
-                    <td>Z.2.X</td>
-                    <td>2028/06/01</td>
-                    <td>2028/12/10</td>
-                </tr>
-            </tbody>
-        </table>
-        <p><em>註：版本 Z.6.0 可能於 2035 年結束。</em></p>
-    </section>
-
-    <hr>
-
-    <section id="faq">
-        <h2>常見問題 (FAQ)</h2>
-        <h3>EFI 版為什麼不會被廢除？</h3>
-        <p>因為 rootfs 深度依賴 UEFI 提供的 API，大幅修改將導致系統結構崩潰。</p>
-
-        <h3>各版本 App 互不相容嗎？</h3>
-        <p>取決於開發者是否提供跨平台 API (km/so/efiP)。若僅提供特定模塊（如 <code>powermanager</code>），則其他環境將無法啟動。</p>
-        <p><strong>注意：</strong>請勿嘗試自行編寫 App API，除非你完全理解其運作機制。</p>
-
-        <h3>舊版本會被刪除嗎？</h3>
-        <p>不會。所有版本均會保留供測試與研究，但 EOL 版本不保證運行穩定。</p>
-    </section>
+    </main>
 
     <footer>
-        <hr>
-        <p style="text-align: center; color: #8b949e;">最後更新時間：2026/03/22</p>
+        &copy; 2026 Alua Project | Last Updated: 2026/03/26
     </footer>
 
 </body>
