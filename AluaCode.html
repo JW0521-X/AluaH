@@ -1,4 +1,20 @@
 <script type="module" src="https://jsdelivr.net"></script>
 
-<!-- 直接讀取外部 md 檔案 -->
-<zero-md src="Code.md"></zero-md>
+<zero-md src="Code.md">
+  <template>
+    <!-- 引入 GitHub Dark 樣式表 -->
+    <link rel="stylesheet" href="https://jsdelivr.net">
+    <style>
+      .markdown-body {
+        box-sizing: border-box;
+        min-width: 200px;
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 45px;
+        background-color: #0d1117; /* 黑色背景 */
+      }
+      /* 確保整個元件背景也是黑的 */
+      :host { display: block; background-color: #0d1117; }
+    </style>
+  </template>
+</zero-md>
