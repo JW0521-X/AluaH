@@ -67,44 +67,9 @@
         <h2 class="experimental">未來開發計劃 (草案)</h2>
         <p>以下內容可能隨開發進度調整或廢除：</p>
         
-        <h3>指令集架構 (ISA)</h3>
-        <p>Alua 採用 32-bit 定長指令格式，確保在內存受限環境下的解碼效率：</p>
-        <table>
-            <thead>
-                <tr>
-                    <th>分類</th>
-                    <th>指令 (OpCodes)</th>
-                    <th>說明</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Data</strong></td>
-                    <td><code>LOADK</code>, <code>MOVE</code>, <code>GETGLOBAL</code></td>
-                    <td>常量加載、寄存器移動、全域變數獲取</td>
-                </tr>
-                <tr>
-                    <td><strong>Math</strong></td>
-                    <td><code>ADD</code>, <code>SUB</code>, <code>MUL</code>, <code>DIV</code></td>
-                    <td>純整數算術運算</td>
-                </tr>
-                <tr>
-                    <td><strong>Flow</strong></td>
-                    <td><code>JMP</code>, <code>EQ</code>, <code>LT</code>, <code>TEST</code></td>
-                    <td>跳轉與邏輯判斷 (支持 <code>if-else-fi</code>)</td>
-                </tr>
-                <tr>
-                    <td><strong>System</strong></td>
-                    <td><code>PRINT</code>, <code>CALL</code></td>
-                    <td>系統輸出與函數調用</td>
-                </tr>
-            </tbody>
-        </table>
-        
         <h3>其他提案</h3>
         <ul>
             <li>渲染系統移植方案 (驅動選定中)</li>
-            <li>Linux Kernel 移植實驗</li>
         </ul>
     </section>
 
