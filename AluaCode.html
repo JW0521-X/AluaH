@@ -1,20 +1,51 @@
-<script type="module" src="https://jsdelivr.net"></script>
-
-<zero-md src="Code.md">
-  <template>
-    <!-- 引入 GitHub Dark 樣式表 -->
-    <link rel="stylesheet" href="https://jsdelivr.net">
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>Fast Markdown</title>
+    <!-- 直接讀取本地腳本，不連網 -->
+    <script src="marked.min.js"></script>
     <style>
-      .markdown-body {
-        box-sizing: border-box;
-        min-width: 200px;
-        max-width: 980px;
-        margin: 0 auto;
-        padding: 45px;
-        background-color: #0d1117; /* 黑色背景 */
-      }
-      /* 確保整個元件背景也是黑的 */
-      :host { display: block; background-color: #0d1117; }
+        /* 極簡純黑樣式，省去載入外部 CSS 的時間 */
+        body { 
+            background-color: #000; 
+            color: #d1d1d1; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        pre { 
+            background: #1e1e1e; 
+            padding: 16px; 
+            border-radius: 8px; 
+            overflow: auto; 
+            color: #569cd6; /* 程式碼簡單上色 */
+        }
+        code { font-family: monospace; }
+        h1, h2, h3 { color: #fff; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        a { color: #58a6ff; }
     </style>
-  </template>
-</zero-md>
+</head>
+<body>
+    <div id="content">載入中...</div>
+
+    <script>
+        // 核心邏輯：讀取 -> 解析 -> 渲染
+        async function render() {
+            const el = document.getElementById('content');
+            try {
+                const res = await fetch('Code.md');
+                if (!res.ok) throw new Error('找不到檔案');
+                const md = await res.text();
+                // 使用本地 marked 解析
+                el.innerHTML = marked.parse(md);
+            } catch (e) {
+                el.innerHTML = '錯誤: ' + e.message;
+            }
+        }
+        render();
+    </script>
+</body>
+</html>
